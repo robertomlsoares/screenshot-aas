@@ -8,6 +8,6 @@ WORKDIR /screenshot-aas-server/
 
 RUN pip install -r requirements.txt
 
-COPY server/ /screenshot-aas-server/
+COPY src /screenshot-aas-server/
 
 CMD ["gunicorn", "-c", "config.py", "server:app"]

@@ -1,7 +1,8 @@
+#!/usr/bin/python
 # coding: utf-8
 
 """
-    routes
+    server
     ~~~~~~
 
     This is a screenshot-as-a-service application used to take screenshots
@@ -19,9 +20,9 @@ import pika
 from flask import Flask, abort, request
 from redis import Redis
 
-from server import app
+from server_exceptions import MissingParameter
 
-from .exceptions import MissingParameter
+app = Flask(__name__)
 
 redis_conn = Redis(os.environ.get('REDIS_IP'))
 
