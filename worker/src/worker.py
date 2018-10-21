@@ -31,24 +31,40 @@ rabbit_conn = pika.BlockingConnection(
 channel = rabbit_conn.channel()
 channel.queue_declare(queue='screenshot', durable=True)
 
-work_photographer = Photographer()
-
 
 def take_screenshot(ch, method, properties, body):
+    """
+    This is the job's main function: taking a screenshot of a website and
+    returning the base64 data of the image. It will receive the URL from
+    RabbitMQ and save the data of the image on Redis.
+
+    :param ch (dict): RabbitMQ channel.
+    :param method (dict): Method from RabbitMQ. Used to send ACK messages.
+    :param properties (dict): Dict of properties of the RabbitMQ channel.
+    :param body (str): Body of the message. String in a JSON format.
+    """
+
     logging.info('Received job %r' % body)
+    work_photographer = Photographer()
     job_body = json.loads(body)
     job_id = job_body.get('job_id')
     job_url = job_body.get('url')
     try:
         img_base64 = work_photographer.take_screenshot(job_url)
         redis_conn.hset(job_id, job_url, img_base64)
-    except:
+    except Exception as e:
         redis_conn.hset('status_' + job_id, 'status', 'Error')
         redis_conn.hset(job_id, job_url, 'Could not take screenshot.')
+        logging.warn(e)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def consume_jobs():
+    """
+    Main loop of the worker. It will bind to a RabbitMQ channel and work on its
+    messages.
+    """
+
     logging.info('Waiting for screenshot jobs.')
 
     channel.basic_qos(prefetch_count=1)

@@ -68,7 +68,7 @@ def _handle_post_screenshot(req_data):
     if not urls:
         raise MissingParameter(
             'Invalid request. Please provide at least one URL.')
-    return _enqueue_urls(urls)
+    return _enqueue_urls(list(set(urls)))
 
 
 def _handle_get_screenshot(job_id):
@@ -100,7 +100,7 @@ def post_screenshot(job_id=None):
     """
     Route used to request and retrieve screenshots.
     When requesting, use a POST request with the payload containing a key named
-    'urls' where the value is a list of URLs.
+    'urls' where the value is a list of URLs. Repeated URLs will be ignored.
     When retrieving, use a GET request with the job id at the end of the route
     (/screenshot/<job_id>).
 
