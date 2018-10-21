@@ -2,6 +2,8 @@ FROM python:2.7.15-slim
 
 LABEL maintainer="robertomlsoares@gmail.com"
 
+EXPOSE 5000
+
 COPY requirements.txt /screenshot-aas-server/
 
 WORKDIR /screenshot-aas-server/

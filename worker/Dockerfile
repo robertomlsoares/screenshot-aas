@@ -16,8 +16,6 @@ RUN wget -q --continue -P /chromedriver/ "http://chromedriver.storage.googleapis
 RUN unzip /chromedriver/chromedriver* -d /chromedriver/
 ENV PATH /chromedriver:$PATH
 
-EXPOSE 5000
-
 COPY requirements.txt /screenshot-aas-worker/
 
 WORKDIR /screenshot-aas-worker/
