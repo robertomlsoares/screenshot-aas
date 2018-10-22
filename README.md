@@ -1,8 +1,8 @@
 # Screenshot-as-a-Service
 
 This application is a backend component responsible for taking screenshots
-of URLs provided by users. The server endpoints are separated by the worker
-that takes the screenshots by a job queue using RabbitMQ.
+of URLs provided by users. The server endpoints and the workers (the ones that
+take screenshots) are separated by a job queue using RabbitMQ.
 
 ## RabbitMQ and Redis
 
